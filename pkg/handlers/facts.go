@@ -10,6 +10,7 @@ import (
 	"github.com/imad-almansi/backend-test-golang/pkg/model"
 	"github.com/imad-almansi/backend-test-golang/pkg/mongodb"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func HandleFacts(rw http.ResponseWriter, req *http.Request) {
@@ -34,7 +35,18 @@ func HandleFacts(rw http.ResponseWriter, req *http.Request) {
 		filter = mongodb.FilterRegex("text", textFilter, filter)
 	}
 
-	cur, err := mongodb.Collection.Find(context.Background(), filter)
+	findOptions := []*options.FindOptions{}
+
+	limit := query.Get("limit")
+	if limit != "" {
+		limitInt, err := strconv.ParseInt(limit, 10, 64)
+		if err != nil {
+			log.Fatal("limit is an invalid Int64: ", err)
+		}
+		findOptions = append(findOptions, options.Find().SetLimit(limitInt))
+	}
+
+	cur, err := mongodb.Collection.Find(context.Background(), filter, findOptions...)
 	if err != nil {
 		log.Fatal("Find failed: ", err)
 	}
