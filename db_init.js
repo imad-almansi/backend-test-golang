@@ -1,7 +1,9 @@
+db = db.getSiblingDB("admin");
+
 db.createUser(
   {
       user: _getEnv("MONGO_READ_USER"),
-      pwd: _getEnv("MONGO_READ_PASSWORD"),
+      pwd: _getEnv("MONGO_READ_PASS"),
       roles: [
           {
               role: "read",
