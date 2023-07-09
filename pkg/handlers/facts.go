@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/imad-almansi/backend-test-golang/pkg/model"
 	"github.com/imad-almansi/backend-test-golang/pkg/mongodb"
@@ -18,7 +19,19 @@ func HandleFacts(rw http.ResponseWriter, req *http.Request) {
 
 	typeFilter := query.Get("type")
 	if typeFilter != "" {
-		fmt.Printf("%s\n", typeFilter)
+		filter = mongodb.FilterLiteral("type", typeFilter, filter)
+	}
+	foundFilter := query.Get("found")
+	if foundFilter != "" {
+		foundBoolean, err := strconv.ParseBool(foundFilter)
+		if err != nil {
+			log.Fatal("found filter is an invalid boolean: ", err)
+		}
+		filter = mongodb.FilterLiteral("found", foundBoolean, filter)
+	}
+	textFilter := query.Get("text")
+	if textFilter != "" {
+		filter = mongodb.FilterRegex("text", textFilter, filter)
 	}
 
 	cur, err := mongodb.Collection.Find(context.Background(), filter)
@@ -31,5 +44,5 @@ func HandleFacts(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Fatal("Decode failed: ", err)
 	}
-	fmt.Println((results)[0])
+	fmt.Println(results)
 }
