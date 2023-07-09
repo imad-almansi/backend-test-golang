@@ -24,6 +24,12 @@ func TestFilterLiteral(t *testing.T) {
 			value:    true,
 			expected: bson.D{{Key: "found", Value: true}},
 		},
+		"filter a string field with empty prevFilter": {
+			field:      "type",
+			value:      "abc",
+			prevFilter: bson.D{},
+			expected:   bson.D{{Key: "type", Value: "abc"}},
+		},
 		"filter 2 string fields": {
 			field:      "type",
 			value:      "xyz",
@@ -70,6 +76,20 @@ func TestFilterRegex(t *testing.T) {
 		"filter a string field with a regex": {
 			field: "text",
 			value: "hello",
+			expected: bson.D{{
+				Key: "text",
+				Value: bson.D{
+					{
+						Key:   "$regex",
+						Value: "hello",
+					},
+				},
+			}},
+		},
+		"filter a string field with a regex with an empty prevFilter": {
+			field:      "text",
+			value:      "hello",
+			prevFilter: bson.D{},
 			expected: bson.D{{
 				Key: "text",
 				Value: bson.D{
