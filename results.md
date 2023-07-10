@@ -25,6 +25,10 @@ There are 2 main components for the application to work(`mongodb`,`facts app`), 
 
 I used `docker-compose` as it's the simplist container orcastration tool for me, and it works well with small projects, however for bigger project `Kubernetes` might be a better tool.
 
+## API
+
+The API config, is generated with swagger as a yaml file [facts_api](facts_api.yaml). a readble documentation can also be accessed [here](https://app.swaggerhub.com/apis/imad_almansi/facts_api/1.0.0)
+
 ## Secrets and Variables
 
 All the secrets and variables are currently injected at deployment time as environment variables, by default by `.env` file with default values, or they can be overriden by exporting them as shell environment. I have choosen this method as it's the easiest way to inject and access the variables, and also it's flixability with different environments, as it can work with `docker-compose`, `Kubernetes`, `AWS Lambda Function`, `Local machine`, ...etc, also for production secrets, depends on the deployment pipline you can use different methods to store them, like `Kubernates Secrets`, `Encrypted Files`, `GitHub or Gitlab Secrets`, `Secret managers in Cloud Platforms`, ...etc, and then inject them on deployment or request them on-demand.
