@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -29,8 +30,13 @@ func init() {
 	if collection == "" {
 		log.Fatal("database collection(DB_COLLECTION) is not defined")
 	}
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		log.Printf("database host(DB_HOST) is not defined, using localhost:27017 as default")
+		host = "localhost:27017"
+	}
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/?tls=false").SetAuth(options.Credential{
+	clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s/", host)).SetAuth(options.Credential{
 		Username: user,
 		Password: password,
 	})

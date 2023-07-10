@@ -31,3 +31,19 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASS}
     links:
       - mongo
+
+  # Application
+  facts:
+    image: facts
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    environment:
+      MONGO_READ_USER: ${MONGO_READ_USER}
+      MONGO_READ_PASS: ${MONGO_READ_PASS}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_COLLECTION: ${DB_COLLECTION}
+    links:
+      - mongo
