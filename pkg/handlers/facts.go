@@ -54,7 +54,7 @@ func HandleFacts(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var result []model.Fact
+	result := []model.Fact{}
 	err = cur.All(context.Background(), &result)
 	if err != nil {
 		results.Negative(rw, fmt.Errorf("Decoding results failed: %w", err), 500)
