@@ -16,6 +16,10 @@ import (
 )
 
 func init() {
+	if mongodb.Collection != nil {
+		return
+	}
+
 	ctx := context.Background()
 	user := os.Getenv("MONGO_READ_USER")
 	password := os.Getenv("MONGO_READ_PASS")
