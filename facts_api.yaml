@@ -1,0 +1,62 @@
+openapi: 3.0.1
+info:
+  title: Facts API
+  description: An endpoint to query facts
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/facts:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: found
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: text
+          in: query
+          schema:
+            type: string
+          example: number
+        - name: type
+          in: query
+          schema:
+            type: string
+          example: trivia
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json:
+              examples:
+                '0':
+                  value: "[\n\t{\n\t\t\"Text\": \"45000000 is the number of turkeys Americans eat at Thanksgiving annually.\",\n\t\t\"Number\": 45000000,\n\t\t\"Found\": true,\n\t\t\"Type\": \"trivia\"\n\t}\n]"
+        '400':
+          description: Auto generated using Swagger Inspector
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                '0':
+                  value: "Bad Request"
+        '500':
+          description: Auto generated using Swagger Inspector
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                '0':
+                  value: "Internal Server Error"
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080

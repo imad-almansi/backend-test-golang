@@ -1,0 +1,49 @@
+services:
+  # Database - Mongo DB
+  mongo:
+    image: mongo:5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      MONGO_READ_USER: ${MONGO_READ_USER}
+      MONGO_READ_PASS: ${MONGO_READ_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_COLLECTION: ${DB_COLLECTION}
+    ports:
+      - "27017:27017"
+    working_dir: /app
+    volumes:
+      - ./db_init.js:/docker-entrypoint-initdb.d/db_init.js:ro
+      - ./db.json:/app/db.json:ro
+
+  # Database Manager
+  mongo-express:
+    image: mongo-express:0.54
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS}
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASS}
+    links:
+      - mongo
+
+  # Application
+  facts:
+    image: facts
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    environment:
+      MONGO_READ_USER: ${MONGO_READ_USER}
+      MONGO_READ_PASS: ${MONGO_READ_PASS}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_COLLECTION: ${DB_COLLECTION}
+    links:
+      - mongo
