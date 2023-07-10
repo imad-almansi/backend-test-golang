@@ -16,6 +16,7 @@ func Positive(rw http.ResponseWriter, result []model.Fact) {
 		return
 	}
 
+	rw.Header().Add("Content-Type", "application/json")
 	_, err = rw.Write(jsonResult)
 	if err != nil {
 		Negative(rw, fmt.Errorf("failed to write response, error was: %s", err), 500)
